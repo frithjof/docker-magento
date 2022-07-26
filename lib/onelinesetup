@@ -4,9 +4,11 @@ set -o errexit
 DOMAIN=${1:-magento.test}
 VERSION=${2:-2.4.4}
 EDITION=${3:-community}
+PORT=${4:-8090}
+PORTSSL=${5:-8091}
 
-curl -s https://raw.githubusercontent.com/markshust/docker-magento/master/lib/template | bash
+curl -s https://raw.githubusercontent.com/frithjof/docker-magento/master/lib/template | bash
 
 # &&'s are used below otherwise onelinesetup script fails/errors after bin/download
-bin/download "${VERSION}" "${EDITION}" \
+bin/download "${VERSION}" "${EDITION}" "${PORT}" "${PORTSSL}"\
   && bin/setup "${DOMAIN}"

@@ -2,6 +2,8 @@
 
 VERSION=${1:-2.4.4}
 EDITION=${2:-community}
+PORT=${3:-8090}
+PORTSSL=${4:-8091}
 
 bin/stop
 
@@ -13,6 +15,9 @@ if (( $(echo "$VERSION_ROOT < 244" | bc -l) )); then
 else
   sed -i -e 's/7.4\-fpm\-15/8.1\-fpm\-1/g' docker-compose.yml
 fi
+
+sed -i -e "s/HTTP_PORT/$PORT/g" docker-compose.yml
+sed -i -e "s/HTTP_PORT/$PORTSSL/g" docker-compose.yml
 
 docker compose -f docker-compose.yml up -d
 [ $? != 0 ] && echo "Failed to start Docker services" && exit
