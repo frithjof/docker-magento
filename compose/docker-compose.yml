@@ -16,8 +16,8 @@ services:
   app:
     image: markoshust/magento-nginx:1.18-7
     ports:
-      - "HTTP_PORT:8000"
-      - "HTTPS_PORT:8443"
+      - "HTTPPORT:8000"
+      - "HTTPSPORT:8443"
     volumes: &appvolumes
       - ~/.composer:/var/www/.composer:cached
       - ~/.ssh/id_rsa:/var/www/.ssh/id_rsa:cached
