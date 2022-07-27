@@ -30,6 +30,9 @@ if [ -z "$PUBLIC_KEY" ] || [ -z "$PRIVATE_KEY" ]; then
     echo "Please setup Composer auth for repo.magento.com to continue." && exit 1
 fi
 
+bin/fixowns
+bin/fixperms
+
 # Output must be piped otherwise file descriptor errors occur. Carriage returns?
 echo "composer config --global http-basic.repo.magento.com ${PUBLIC_KEY} ${PRIVATE_KEY}" | bin/clinotty bash -
 
