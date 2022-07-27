@@ -10,7 +10,7 @@ PORTSSL=${5:-8091}
 curl -s https://raw.githubusercontent.com/frithjof/docker-magento/master/lib/template | bash
 
 # &&'s are used below otherwise onelinesetup script fails/errors after bin/download
-echo "template setup now run "
+echo "template is setup now run "
 echo "****************"
 echo "bin/download ${VERSION} ${EDITION} ${PORT} ${PORTSSL} && bin/setup ${DOMAIN}"
 echo "****************"
