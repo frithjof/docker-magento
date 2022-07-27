@@ -21,7 +21,7 @@ else
 fi
 
 
-docker compose up -d
+docker-compose up -d
 [ $? != 0 ] && echo "Failed to start Docker services" && exit
 
 bin/setup-composer-auth
