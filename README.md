@@ -14,6 +14,19 @@ Following is community for edition and then ports for http and https
 
 After the one-liner above completes running, you should be able to access your site at `https://magento.test`.
 
+
+you can install sample data with 
+```bash
+bin/setup-sample-data
+```
+
+you can adjust and SHOULD params in ./env like admin user and rerun setup via
+```bash
+bin/setup
+```
+
+
+
 <h1 align="center">markshust/docker-magento</h1>
 
 <div align="center">
