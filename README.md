@@ -1,3 +1,19 @@
+### Automated Setup (New Project)
+
+```bash
+# Create your project directory then go into it:
+mkdir -p ~/Sites/magento
+cd $_
+
+# Run this automated one-liner from the directory you want to install your project.
+curl -s https://raw.githubusercontent.com/frithjof/docker-magento/master/lib/onelinesetup | bash -s -- magento.test 2.4.4 community 8011 8012
+```
+
+The `magento.test` above defines the hostname to use, and the `2.4.4` defines the Magento version to install. Note that since we need a write to `/etc/hosts` for DNS resolution, you will be prompted for your system password during setup.
+Following is community for edition and then ports for http and https
+
+After the one-liner above completes running, you should be able to access your site at `https://magento.test`.
+
 <h1 align="center">markshust/docker-magento</h1>
 
 <div align="center">
