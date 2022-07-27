@@ -1,0 +1,15 @@
+#!/bin/bash
+set -o errexit
+
+bin/setup-composer-auth
+
+bin/fixowns
+bin/clinotty [ -d "./var/composer_home" ] && bin/clinotty cp /var/www/.composer/auth.json /var/www/html/var/composer_home/auth.json
+bin/cli bin/magento sampledata:deploy
+
+echo "Clearing the cache to apply updates..."
+bin/clinotty bin/magento cache:flush
+echo "Forcing deploy of static content to speed up initial requests..."
+bin/clinotty bin/magento setup:upgrade
+bin/clinotty bin/magento setup:di:compile
+bin/clinotty bin/magento setup:static-content:deploy -f

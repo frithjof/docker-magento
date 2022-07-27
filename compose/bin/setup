@@ -15,6 +15,8 @@ source env/magento.env
 source env/rabbitmq.env
 
 DOMAIN=${1:-magento.test}
+PORT=${2:-8011}
+PORTSSL=${3:-8012}
 
 bin/stop
 
@@ -22,7 +24,8 @@ docker compose -f docker-compose.yml up -d
 [ $? != 0 ] && echo "Failed to start Docker services" && exit
 
 bin/clinotty chmod u+x bin/magento
-rm -rf src && mkdir src
+# dont remove composer create
+# rm -rf src && mkdir src
 
 echo "Adding Magento modules to Composer allow-plugins directive..."
 bin/clinotty composer config --no-plugins allow-plugins.magento/magento-composer-installer true
@@ -51,7 +54,7 @@ bin/clinotty bin/magento setup:install \
   --db-name="$MYSQL_DATABASE" \
   --db-user="$MYSQL_USER" \
   --db-password="$MYSQL_PASSWORD" \
-  --base-url=https://"$DOMAIN"/ \
+  --base-url=http://"$DOMAIN"/ \
   --base-url-secure=https://"$DOMAIN"/ \
   --backend-frontname="$MAGENTO_ADMIN_FRONTNAME" \
   --admin-firstname="$MAGENTO_ADMIN_FIRST_NAME" \
@@ -93,11 +96,14 @@ echo "Re-indexing with Elasticsearch..."
 bin/clinotty bin/magento indexer:reindex
 
 echo "Setting basic URL and generating SSL certificate..."
-bin/setup-domain "${DOMAIN}"
+bin/setup-domain ${DOMAIN} ${PORT} ${PORTSSL}
 
 echo "Fixing owner and permissions..."
 bin/fixowns
 bin/fixperms
+
+echo "disable 2fa"
+bin/clinotty bin/magento module:disable Magento_TwoFactorAuth
 
 echo "Clearing the cache to apply updates..."
 bin/clinotty bin/magento cache:flush
@@ -105,10 +111,15 @@ bin/clinotty bin/magento cache:flush
 echo "Installing cron, run 'bin/cron start' to enable..."
 bin/clinotty bin/magento cron:install
 
+echo "Forcing deploy of static content to speed up initial requests..."
+bin/clinotty bin/magento setup:upgrade
+bin/clinotty bin/magento setup:di:compile
+bin/clinotty bin/magento setup:static-content:deploy -f
+
 echo "Turning on developer mode..."
 bin/clinotty bin/magento deploy:mode:set developer
 
 cp -r .vscode src/
 
 echo "Docker development environment setup complete."
-echo "You may now access your Magento instance at https://${DOMAIN}/"
+echo "You may now access your Magento instance at https://${DOMAIN}:${PORTSSL} "
