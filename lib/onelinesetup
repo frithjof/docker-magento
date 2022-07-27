@@ -11,8 +11,9 @@ curl -s https://raw.githubusercontent.com/frithjof/docker-magento/master/lib/tem
 
 # &&'s are used below otherwise onelinesetup script fails/errors after bin/download
 echo "template setup now run "
-echo "bin/download ${VERSION} ${EDITION} ${PORT} ${PORTSSL}"
-echo "bin/setup ${DOMAIN}"
+echo "****************"
+echo "bin/download ${VERSION} ${EDITION} ${PORT} ${PORTSSL} && bin/setup ${DOMAIN}"
+echo "****************"
 
 # bin/download "${VERSION}" "${EDITION}" "${PORT}" "${PORTSSL}"
 # bin/setup "${DOMAIN}"
